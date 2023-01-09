@@ -4,13 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documents</title>
+    <title>Weather App</title>
+    <!-- <link rel="stylesheet" href="index.css"> -->
+    <style>
+        body{
+            background-size: cover;
+           /* max-height: 1000px; */
+            /* width: 100vw; */
+            background-image: url(https://images.unsplash.com/photo-1592210454359-9043f067919b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8d2VhdGhlcnxlbnwwfHwwfHw%3D&w=1000&q=80);
+        }
+        .container{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+        }
+        #city{
+            border: 1px solid grey;
+            border-radius: 10px;
+            width: 40vw;
+            height: 6vh;
+            text-align: center;
+        }
+        button{
+            border: 1px solid grey;
+            border-radius: 12px;
+            width: 8vw;
+            height: 7vh;
+        }
+
+   
+        
+       
+    </style>
 </head>
 <body>
-    <form action="/" method="post">
-        <label for="name">City name:</label>
-        <input type="text" name="city" id="city" autocomplete="off">
+    <div class="container">
+    <form class="form" action="/" method="post">
+        <!-- <label for="name">City name:</label> -->
+        <!-- <input class="input-box" type="text" name="city" id="city" placeholder="City Name" autocomplete="off"> -->
+        <input type="text" name="city" id="city" placeholder="Enter City Name" autocomplete="off">
         <button type="submit">search</button>
     </form>
+</div>
 </body>
 </html>

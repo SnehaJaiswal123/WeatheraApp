@@ -1,38 +1,62 @@
 const express=require('express');
+// import {alert} from 'node-popup';
+const fs=require('fs')
 const https=require('https')
 const bodyParser=require('body-parser');
 const { urlencoded } = require('body-parser');
 const app=express();
 app.use(bodyParser.urlencoded({extended:true}))
 app.set('view engine','ejs')
+let cityname="ghaziabad";
+const apikey='8ca81e549ccf2e7d6d666a8346053b75';
+var url='https://api.openweathermap.org/data/2.5/weather?q=ghaziabad&appid='+apikey+'&units=metric'
+https.get(url, (response)=>{
+    response.on('data',(data)=>{
+    var weatherdata = JSON.parse(data);
+    var description=weatherdata.weather[0].description;
+    var temperature=weatherdata.main.temp;
+    var feelslike=weatherdata.main.feels_like;
+    var humidity=weatherdata.main.humidity;
+    var pressure=weatherdata.wind.speed;
+    var location=weatherdata.name;
+    var country=weatherdata.sys.country;
+        console.log(temperature);
+        console.log(location);
+        parama={temperature:temperature,description:description,humidity:humidity,windSpeed:pressure,location:location,feelslike:feelslike,country:country}
+    })            
+})
 app.get('/',(req,res)=>{
-    res.sendFile(__dirname+'/index.html');
-
-   
+    param={country:"IN",location:"location",temperature:"temp",description:"description",humidity:"",windSpeed:"",feelslike:""}
+    res.render('home',parama) 
 })
 app.post('/',(req,res)=>{
-    const cityname=req.body.city;
-    const apikey='8ca81e549ccf2e7d6d666a8346053b75';
-    let url='https://api.openweathermap.org/data/2.5/weather?q='+cityname+'&appid='+apikey+'&units=metric'
-    https.get(url,(response)=>{
-        response.on('data',(data)=>{
+    
+     cityname=req.body.city;
+    url='https://api.openweathermap.org/data/2.5/weather?q='+cityname+'&appid='+apikey+'&units=metric'
+ 
+    https.get(url, (response)=>{   
+        response.on('data',async(data)=>{        
             const weatherdata = JSON.parse(data);
-            let temp=weatherdata.main.temp;
+            if(weatherdata.cod=="404"){
+                console.log("Invalid City Name");
+                const notifier = require('node-notifier');
+                notifier.notify('Invalid City Name');
+            }
+            else{
+            let temperature=weatherdata.main.temp;
             let description=weatherdata.weather[0].description;
             let feelslike=weatherdata.main.feels_like;
             let humidity=weatherdata.main.humidity;
-            let pressure=weatherdata.main.pressure;
-        
-            console.log(description)
-            console.log(temp);
-            params={temp:temp,description:description,humidity:humidity,pressure:pressure,feelslike:feelslike}
+            let pressure=weatherdata.wind.speed;
+            let location=weatherdata.name;
+            let country=weatherdata.sys.country;
+            params={temperature:temperature,description:description,humidity:humidity,windSpeed:pressure,location:location,feelslike:feelslike,country:country}
             res.render('home',params);
-       
-
-
-        })
-    
+            }
+        })  
+           
     })
+
 
 })
 app.listen(3000,()=>{
