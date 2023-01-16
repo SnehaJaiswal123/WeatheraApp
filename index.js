@@ -1,5 +1,4 @@
 const express=require('express');
-// import {alert} from 'node-popup';
 const fs=require('fs')
 const https=require('https')
 const bodyParser=require('body-parser');
@@ -9,7 +8,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.set('view engine','ejs')
 let cityname="ghaziabad";
 const apikey='8ca81e549ccf2e7d6d666a8346053b75';
-var url='https://api.openweathermap.org/data/2.5/weather?q=ghaziabad&appid='+apikey+'&units=metric'
+var url='https://api.openweathermap.org/data/2.5/weather?q='+cityname+'&appid='+apikey+'&units=metric'
 https.get(url, (response)=>{
     response.on('data',(data)=>{
     var weatherdata = JSON.parse(data);
@@ -22,12 +21,12 @@ https.get(url, (response)=>{
     var country=weatherdata.sys.country;
         console.log(temperature);
         console.log(location);
-        parama={temperature:temperature,description:description,humidity:humidity,windSpeed:pressure,location:location,feelslike:feelslike,country:country}
+        console.log(description)
+        params={temperature:temperature,description:description,humidity:humidity,windSpeed:pressure,location:location,feelslike:feelslike,country:country}
     })            
 })
 app.get('/',(req,res)=>{
-    param={country:"IN",location:"location",temperature:"temp",description:"description",humidity:"",windSpeed:"",feelslike:""}
-    res.render('home',parama) 
+    res.render('home',params) 
 })
 app.post('/',(req,res)=>{
     
@@ -50,8 +49,11 @@ app.post('/',(req,res)=>{
             let pressure=weatherdata.wind.speed;
             let location=weatherdata.name;
             let country=weatherdata.sys.country;
+
             params={temperature:temperature,description:description,humidity:humidity,windSpeed:pressure,location:location,feelslike:feelslike,country:country}
+
             res.render('home',params);
+
             }
         })  
            
